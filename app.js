@@ -8,7 +8,6 @@ dotenv.config();
 
 // Import Routes
 const authRoute = require('./routes/auth');
-const postRoute = require('./routes/posts');
 
 // Connect to DB
 mongoose.connect(process.env.DB_CONNECT,
