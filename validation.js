@@ -10,7 +10,7 @@ const schema = {
 return Joi.validate(data, schema);
 };
 
-// Register validation
+// Login validation
 const loginValidation = data =>{
     const schema = {
         username: Joi.string().min(5).required(),
