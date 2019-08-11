@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require('../model/User');
 const { registerValidation, loginValidation } = require('../validation');
+const bcrypt = require("bcryptjs");
 
 router.post('/register', async (req, res)=>{
 
@@ -12,15 +13,20 @@ router.post('/register', async (req, res)=>{
     const usernameExist = await User.findOne({username: req.body.username});
     if(usernameExist) return res.status(400).send('User already exists');
 
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPasswd = await bcrypt.hash(req.body.password, salt);
+
+
     // Create a new user
     const user = new User({
          username: req.body.username,
-         password: req.body.password
+         password: hashedPasswd
     });
 
     try {
         const savedUser = await user.save();
-         res.send(savedUser);   
+         res.send({user: user._id});   
     } catch (err) {
          res.status(400).send(err);
     }
